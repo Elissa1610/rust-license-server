@@ -1,18 +1,18 @@
- 
-body {
+html, body {
+    background-color: #101010 !important;
+    color: #f0f0f0 !important;
     font-family: Arial, sans-serif;
-    background-color: #101010;
-    color: #f0f0f0;
+    margin: 0;
     padding: 20px;
     line-height: 1.6;
   }
   
   h1, h2, h3 {
-    color: #ff9900;
+    color: #ff9900 !important;
   }
   
   a {
-    color: #66ccff;
+    color: #66ccff !important;
     text-decoration: none;
   }
   a:hover {
@@ -21,12 +21,12 @@ body {
   
   nav a {
     margin-right: 10px;
-    color: #ffffff;
+    color: #ffffff !important;
   }
   
   button {
-    background-color: #ff9900;
-    color: #000;
+    background-color: #ff9900 !important;
+    color: #000 !important;
     padding: 8px 16px;
     border: none;
     cursor: pointer;
@@ -50,8 +50,9 @@ body {
   }
   
   li {
-    background: #1a1a1a;
+    background: #1a1a1a !important;
     margin-bottom: 5px;
     padding: 10px;
     border-radius: 5px;
   }
+  
