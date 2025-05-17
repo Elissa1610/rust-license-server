@@ -69,7 +69,32 @@ def log_event(key, hwid, ip, event):
     conn.commit()
     conn.close()
 
-# -------------------- AUTH --------------------
+# -------------------- ROUTES --------------------
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+@app.route("/cheats")
+def cheats():
+    return render_template("cheats.html")
+
+@app.route("/cheats/rust")
+def cheat_rust():
+    return render_template("cheat_rust.html")
+
+@app.route("/purchase/rust")
+def purchase_rust():
+    return render_template("purchase_rust.html")
+
+@app.route("/success")
+def success():
+    key = request.args.get("key")
+    return render_template("success.html", key=key)
+
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -121,28 +146,6 @@ def logout():
     session.clear()
     return redirect("/login")
 
-# -------------------- PUBLIC --------------------
-@app.route("/")
-def home(): return render_template("index.html")
-
-@app.route("/cheats")
-def cheats(): return render_template("cheats.html")
-
-@app.route("/cheats/rust")
-def cheat_rust(): return render_template("cheat_rust.html")
-
-@app.route("/purchase/rust")
-def purchase_rust(): return render_template("purchase_rust.html")
-
-@app.route("/success")
-def success():
-    key = request.args.get("key")
-    return render_template("success.html", key=key)
-
-@app.route("/faq")
-def faq(): return render_template("faq.html")
-
-# -------------------- LICENSE ADMIN --------------------
 @app.route("/generate", methods=["POST"])
 def generate():
     if session.get("role") != "admin": return "Unauthorized", 403
@@ -170,52 +173,39 @@ def revoke():
     flash("Key revoked.", "warning")
     return redirect("/admin")
 
-# -------------------- API ENDPOINTS --------------------
 @app.route("/api/verify", methods=["POST"])
 def api_verify():
     data = request.get_json()
     key = data.get("key")
     hwid = data.get("hwid")
     ip = request.remote_addr
-
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-
-    # Check blacklist
     c.execute("SELECT * FROM blacklist WHERE hwid = ?", (hwid,))
     if c.fetchone():
         log_event(key, hwid, ip, "blacklisted")
         return jsonify({"status": "banned"})
-
-    # Check key
     c.execute("SELECT status, hwid, expires_at FROM license_keys WHERE key = ?", (key,))
     row = c.fetchone()
-
     if not row:
         log_event(key, hwid, ip, "invalid_key")
         return jsonify({"status": "invalid"})
-
     status, bound_hwid, expires = row
     now = datetime.now()
-
     if datetime.strptime(expires, "%Y-%m-%d %H:%M:%S") < now:
         log_event(key, hwid, ip, "expired")
         return jsonify({"status": "expired"})
-
     if status == "revoked":
         log_event(key, hwid, ip, "revoked_attempt")
         return jsonify({"status": "revoked"})
-
     if bound_hwid and bound_hwid != hwid:
         log_event(key, hwid, ip, "hwid_mismatch")
         return jsonify({"status": "hwid_mismatch"})
-
     if not bound_hwid:
         c.execute("UPDATE license_keys SET hwid = ?, status = 'active', ip = ? WHERE key = ?", (hwid, ip, key))
         log_event(key, hwid, ip, "bound_new_hwid")
     else:
         log_event(key, hwid, ip, "verified")
-
     conn.commit()
     conn.close()
     return jsonify({"status": "valid"})
@@ -258,6 +248,4 @@ if __name__ == "__main__":
         conn.close()
     except Exception as e:
         print("[DB INIT ERROR]", e)
-
-    #  THIS MUST BE OUTSIDE THE try block:
     app.run(debug=False, host='0.0.0.0', port=10000)
