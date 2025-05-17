@@ -1,7 +1,10 @@
 [admin_dashboard.html]
 <!DOCTYPE html>
 <html>
-<head><title>Admin Dashboard</title></head>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
   <h1>Admin Dashboard</h1>
   <form method="POST" action="/generate">
@@ -21,4 +24,4 @@
     {% for l in logs %}<li>{{ l }}</li>{% endfor %}
   </ul>
 </body>
-</html> 
+</html>

@@ -1,7 +1,10 @@
 [login.html]
 <!DOCTYPE html>
 <html>
-<head><title>Login</title></head>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
   <h1>Staff Login</h1>
   <form method="POST">
@@ -10,4 +13,4 @@
     <button type="submit">Login</button>
   </form>
 </body>
-</html> 
+</html>

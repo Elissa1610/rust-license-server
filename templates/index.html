@@ -1,7 +1,10 @@
- [index.html]
+[index.html]
 <!DOCTYPE html>
 <html>
-<head><title>Welcome</title></head>
+<head>
+  <title>Welcome</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
   <h1>Welcome to RustCheat</h1>
   <nav><a href="/cheats">Cheats</a> | <a href="/faq">FAQ</a> | <a href="/login">Login</a></nav>
