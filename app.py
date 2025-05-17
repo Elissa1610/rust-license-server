@@ -243,7 +243,8 @@ def api_log():
 if __name__ == "__main__":
     init_db()
     if not os.path.exists("loader_stub.exe"):
-        with open("loader_stub.exe", "wb") as f: f.write(b"stub")
+        with open("loader_stub.exe", "wb") as f:
+            f.write(b"stub")
     try:
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
@@ -255,7 +256,8 @@ if __name__ == "__main__":
                       ("tech", generate_password_hash("tech123"), "tech"))
         conn.commit()
         conn.close()
-    except:
-        pass
-        app.run(debug=False, host='0.0.0.0', port=10000)
+    except Exception as e:
+        print("[DB INIT ERROR]", e)
 
+    #  THIS MUST BE OUTSIDE THE try block:
+    app.run(debug=False, host='0.0.0.0', port=10000)
