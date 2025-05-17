@@ -1,0 +1,17 @@
+[tech_dashboard.html]
+<!DOCTYPE html>
+<html>
+<head><title>Tech Dashboard</title></head>
+<body>
+  <h1>Tech Dashboard</h1>
+  <h2>Keys</h2>
+  <ul>
+    {% for k in keys %}<li>{{ k }}</li>{% endfor %}
+  </ul>
+  <h2>Logs</h2>
+  <ul>
+    {% for l in logs %}<li>{{ l }}</li>{% endfor %}
+  </ul>
+</body>
+</html>
+ 

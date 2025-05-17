@@ -1,0 +1,24 @@
+[admin_dashboard.html]
+<!DOCTYPE html>
+<html>
+<head><title>Admin Dashboard</title></head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <form method="POST" action="/generate">
+    <button type="submit">Generate 30-Day Key</button>
+  </form>
+  <form method="POST" action="/revoke">
+    <input name="key" placeholder="Key to revoke">
+    <input name="reason" placeholder="Reason">
+    <button type="submit">Revoke Key</button>
+  </form>
+  <h2>Keys</h2>
+  <ul>
+    {% for k in keys %}<li>{{ k }}</li>{% endfor %}
+  </ul>
+  <h2>Logs</h2>
+  <ul>
+    {% for l in logs %}<li>{{ l }}</li>{% endfor %}
+  </ul>
+</body>
+</html> 
